@@ -65,6 +65,10 @@
   <div class="game" id="game"></div>
 
  <script>
+
+   const music = document.getElementById('bg-music');
+  let musicStarted = false;
+   
   const images = [
     'card01.png', 'card01.png',
     'card02.png', 'card02.png',
@@ -94,6 +98,11 @@
       `;
 
       card.addEventListener('click', () => {
+        if (!musicStarted) {
+  music.play().catch(() => {});
+  musicStarted = true;
+}
+
         if (lock || card.classList.contains('flipped')) return;
 
         card.classList.add('flipped');
@@ -123,6 +132,8 @@
     });
  
 </script>
+  
+<audio id="bg-music" src="memory.mp3" loop></audio>
 
 </body>
  
