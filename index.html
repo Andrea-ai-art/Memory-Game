@@ -121,7 +121,19 @@
 
       game.appendChild(card);
     });
-  </script>
+ 
+  const music = document.getElementById("bg-music");
+  let musicStarted = false;
+
+  document.addEventListener("click", () => {
+    if (!musicStarted) {
+      music.volume = 0.25; // wichtig: dezent bleiben
+      music.play().catch(() => {});
+      musicStarted = true;
+    }
+  });
+</script>
+
 </body>
   <audio id="bg-music" src="memory.mp3" loop></audio>
 </html>
