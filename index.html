@@ -44,14 +44,12 @@
       justify-content: center;
       align-items: center;
       font-size: 14px;
-      text-align: center;
     }
     .front {
       background: #334155;
     }
     .back {
       background: #f8fafc;
-      color: #020617;
       transform: rotateY(180deg);
     }
     img {
@@ -62,27 +60,31 @@
   </style>
 </head>
 <body>
+
   <div class="game" id="game"></div>
 
- <script>
+  <!-- AUDIO MUSS VOR DEM SCRIPT KOMMEN -->
+  <audio id="bg-music" src="Memory.mp3" loop></audio>
 
-   const music = document.getElementById('bg-music');
-  let musicStarted = false;
-   
-  const images = [
-    'card01.png', 'card01.png',
-    'card02.png', 'card02.png',
-    'card03.png', 'card03.png',
-    'card04.png', 'card04.png',
-    'card05.png', 'card05.png',
-    'card06.png', 'card06.png',
-    'card07.png', 'card07.png',
-    'card08.png', 'card08.png'
-  ];
+  <script>
+    const images = [
+      'card01.png', 'card01.png',
+      'card02.png', 'card02.png',
+      'card03.png', 'card03.png',
+      'card04.png', 'card04.png',
+      'card05.png', 'card05.png',
+      'card06.png', 'card06.png',
+      'card07.png', 'card07.png',
+      'card08.png', 'card08.png'
+    ];
 
     images.sort(() => 0.5 - Math.random());
 
     const game = document.getElementById('game');
+    const music = document.getElementById('bg-music');
+    music.volume = 0.35;
+
+    let musicStarted = false;
     let first = null;
     let lock = false;
 
@@ -93,15 +95,17 @@
       card.innerHTML = `
         <div class="card-inner">
           <div class="card-face front">🎵</div>
-          <div class="card-face back"><img src="${src}" /></div>
+          <div class="card-face back">
+            <img src="${src}" />
+          </div>
         </div>
       `;
 
       card.addEventListener('click', () => {
         if (!musicStarted) {
-  music.play().catch(() => {});
-  musicStarted = true;
-}
+          music.play().catch(() => {});
+          musicStarted = true;
+        }
 
         if (lock || card.classList.contains('flipped')) return;
 
@@ -130,11 +134,7 @@
 
       game.appendChild(card);
     });
- 
-</script>
-  
-<audio id="bg-music" src="memory.mp3" loop></audio>
+  </script>
 
 </body>
- 
 </html>
