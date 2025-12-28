@@ -57,9 +57,20 @@
       max-height: 100%;
       border-radius: 12px;
     }
+
+    #stats {
+  margin-bottom: 16px;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
   </style>
 </head>
 <body>
+
+  <div id="stats">
+  Versuche: <span id="moves">0</span>
+</div>
 
   <div class="game" id="game"></div>
 
@@ -84,6 +95,7 @@
     const music = document.getElementById('bg-music');
     music.volume = 0.35;
 
+    
     let musicStarted = false;
     let first = null;
     let lock = false;
@@ -116,6 +128,9 @@
           return;
         }
 
+        moves++;
+movesDisplay.textContent = moves;
+
         const img1 = first.querySelector('img').src;
         const img2 = card.querySelector('img').src;
 
@@ -131,6 +146,9 @@
           }, 800);
         }
       });
+
+      let moves = 0;
+const movesDisplay = document.getElementById('moves');
 
       game.appendChild(card);
     });
