@@ -124,12 +124,14 @@
         card.classList.add('flipped');
 
         if (!first) {
-          first = card;
-          return;
-        }
+  first = card;
+  return;
+}
 
-        moves++;
-movesDisplay.textContent = moves;
+// AB HIER beginnt ein vollständiger Versuch
+moves++;
+document.getElementById('moves').textContent = `Versuche: ${moves}`;
+
 
         const img1 = first.querySelector('img').src;
         const img2 = card.querySelector('img').src;
