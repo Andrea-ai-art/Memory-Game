@@ -64,6 +64,21 @@
   letter-spacing: 1px;
 }
 
+    #restart {
+  margin-bottom: 20px;
+  padding: 10px 18px;
+  font-size: 14px;
+  background: #1e293b;
+  color: #e5e7eb;
+  border: 1px solid #475569;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#restart:hover {
+  background: #334155;
+}
+
   </style>
 </head>
 <body>
@@ -71,6 +86,8 @@
   <div id="stats">
   Versuche: <span id="moves">0</span>
 </div>
+
+  <button id="restart">Neustart</button>
 
   <div class="game" id="game"></div>
 
@@ -151,6 +168,10 @@ images.forEach(src => {
   });
 
   game.appendChild(card);
+});
+
+    document.getElementById('restart').addEventListener('click', () => {
+  location.reload();
 });
 
   </script>
