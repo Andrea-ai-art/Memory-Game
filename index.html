@@ -123,25 +123,19 @@ const cardsData = [
 cardsData.sort(() => 0.5 - Math.random());
 
 const game = document.getElementById('game');
-const music = document.getElementById('bg-music');
-music.volume = 0.35;
+const movesDisplay = document.getElementById('moves');
+const songBox = document.getElementById('songtitle');
 
-let musicStarted = false;
 let first = null;
 let lock = false;
 let moves = 0;
 
-const movesDisplay = document.getElementById('moves');
-
 function showSongTitle(title) {
-  const titleBox = document.getElementById('songtitle');
-  titleBox.textContent = title;
-
+  songBox.textContent = title;
   setTimeout(() => {
-    titleBox.textContent = '';
+    songBox.textContent = '';
   }, 2000);
 }
-
 
 cardsData.forEach(data => {
   const card = document.createElement('div');
@@ -152,46 +146,40 @@ cardsData.forEach(data => {
     <div class="card-inner">
       <div class="card-face front">🎵</div>
       <div class="card-face back">
-        <img src="${data.img}" />
+        <img src="${data.img}">
       </div>
     </div>
   `;
 
-card.addEventListener('click', () => {
-  if (!musicStarted) {
-    music.play().catch(() => {});
-    musicStarted = true;
-  }
+  card.addEventListener('click', () => {
+    if (lock || card.classList.contains('flipped')) return;
 
-  if (lock || card.classList.contains('flipped')) return;
+    card.classList.add('flipped');
 
-card.classList.add('flipped');
+    if (!first) {
+      first = card;
+      return;
+    }
 
-if (!first) {
-  first = card;
-  return;
-}
+    moves++;
+    movesDisplay.textContent = moves;
 
-// EIN Versuch = zwei Karten
-moves++;
-movesDisplay.textContent = moves;
+    const img1 = first.querySelector('img').src;
+    const img2 = card.querySelector('img').src;
 
-const img1 = first.querySelector('img').src;
-const img2 = card.querySelector('img').src;
-
-if (img1 === img2) {
-  showSongTitle(card.dataset.title);
-  first = null;
-  return;
-} else {
-  lock = true;
-  setTimeout(() => {
-    first.classList.remove('flipped');
-    card.classList.remove('flipped');
-    first = null;
-    lock = false;
-  }, 800);
-}
+    if (img1 === img2) {
+      showSongTitle(card.dataset.title);
+      first = null;
+    } else {
+      lock = true;
+      setTimeout(() => {
+        first.classList.remove('flipped');
+        card.classList.remove('flipped');
+        first = null;
+        lock = false;
+      }, 800);
+    }
+  });
 
   game.appendChild(card);
 });
@@ -200,6 +188,7 @@ document.getElementById('restart').addEventListener('click', () => {
   location.reload();
 });
 </script>
+Warum vorher „alles weg“ war
 
 
 </body>
