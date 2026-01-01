@@ -155,41 +155,41 @@ cardsData.forEach(data => {
     </div>
   `;
 
-  card.addEventListener('click', () => {
-    if (!musicStarted) {
-      music.play().catch(() => {});
-      musicStarted = true;
-    }
+ card.addEventListener('click', () => {
+  if (!musicStarted) {
+    music.play().catch(() => {});
+    musicStarted = true;
+  }
 
-    if (lock || card.classList.contains('flipped')) return;
+  if (lock || card === first || card.classList.contains('flipped')) return;
 
-    card.classList.add('flipped');
+  card.classList.add('flipped');
 
-    if (!first) {
-      first = card;
-      return;
-    }
+  if (!first) {
+    first = card;
+    return;
+  }
 
-    moves++;
-    movesDisplay.textContent = moves;
+  moves++;
+  movesDisplay.textContent = moves;
 
-    const img1 = first.querySelector('img').src;
-    const img2 = card.querySelector('img').src;
+  const img1 = first.querySelector('img').src;
+  const img2 = card.querySelector('img').src;
 
-   if (img1 === img2) {
-      showSongTitle(card.dataset.title);
-      first = null;
-      return;
-     
-    } else {
-      lock = true;
-      setTimeout(() => {
-        first.classList.remove('flipped');
-        card.classList.remove('flipped');
-        first = null;
-        lock = false;
-      }, 800);
-    }
+  if (img1 === img2) {
+    showSongTitle(card.dataset.title);
+    first = null;
+    return;
+  }
+
+  lock = true;
+  setTimeout(() => {
+    first.classList.remove('flipped');
+    card.classList.remove('flipped');
+    first = null;
+    lock = false;
+  }, 800);
+
   });
 
   game.appendChild(card);
