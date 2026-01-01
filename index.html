@@ -87,8 +87,9 @@
 
     <div id="ui">
       
-  <div id="stats">
+ <div id="stats">
   Versuche: <span id="moves">0</span>
+  <div id="song-title"></div>
 </div>
 
   <button id="restart">Neustart</button>
@@ -176,7 +177,16 @@ cardsData.forEach(data => {
     const img2 = card.querySelector('img').src;
 
     if (img1 === img2) {
-      showSongTitle(card.dataset.title);
+
+      function showSongTitle(title) {
+  const titleBox = document.getElementById('song-title');
+  titleBox.textContent = title;
+
+  setTimeout(() => {
+    titleBox.textContent = '';
+  }, 2000);
+}
+
       first = null;
     } else {
       lock = true;
