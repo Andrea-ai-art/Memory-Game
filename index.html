@@ -87,10 +87,11 @@
 
     <div id="ui">
       
- <div id="stats">
+<div id="stats">
   Versuche: <span id="moves">0</span>
-  <div id="song-title"></div>
+  <div id="songtitle" style="margin-top:8px; font-weight:bold;"></div>
 </div>
+
 
   <button id="restart">Neustart</button>
 
@@ -133,13 +134,14 @@ let moves = 0;
 const movesDisplay = document.getElementById('moves');
 
 function showSongTitle(title) {
-  const stats = document.getElementById('stats');
-  stats.innerHTML = `Versuche: <span id="moves">${moves}</span><br><strong>${title}</strong>`;
+  const titleBox = document.getElementById('songtitle');
+  titleBox.textContent = title;
 
   setTimeout(() => {
-    stats.innerHTML = `Versuche: <span id="moves">${moves}</span>`;
+    titleBox.textContent = '';
   }, 2000);
 }
+
 
 cardsData.forEach(data => {
   const card = document.createElement('div');
@@ -163,25 +165,25 @@ card.addEventListener('click', () => {
 
   if (lock || card.classList.contains('flipped')) return;
 
-  card.classList.add('flipped');
+card.classList.add('flipped');
 
-  if (!first) {
-    first = card;
-    return;
-  }
+if (!first) {
+  first = card;
+  return;
+}
 
-  moves++;
-  movesDisplay.textContent = moves;
+// EIN Versuch = zwei Karten
+moves++;
+movesDisplay.textContent = moves;
 
-  const img1 = first.querySelector('img').src;
-  const img2 = card.querySelector('img').src;
+const img1 = first.querySelector('img').src;
+const img2 = card.querySelector('img').src;
 
-  if (img1 === img2) {
-    showSongTitle(card.dataset.title);
-    first = null;
-    return;
-  }
-
+if (img1 === img2) {
+  showSongTitle(card.dataset.title);
+  first = null;
+  return;
+} else {
   lock = true;
   setTimeout(() => {
     first.classList.remove('flipped');
@@ -189,8 +191,7 @@ card.addEventListener('click', () => {
     first = null;
     lock = false;
   }, 800);
-});
-
+}
 
   game.appendChild(card);
 });
