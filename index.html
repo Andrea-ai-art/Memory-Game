@@ -179,6 +179,8 @@ cardsData.forEach(data => {
    if (img1 === img2) {
       showSongTitle(card.dataset.title);
       first = null;
+      return;
+     
     } else {
       lock = true;
       setTimeout(() => {
