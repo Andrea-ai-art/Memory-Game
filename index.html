@@ -155,13 +155,13 @@ cardsData.forEach(data => {
     </div>
   `;
 
- card.addEventListener('click', () => {
+card.addEventListener('click', () => {
   if (!musicStarted) {
     music.play().catch(() => {});
     musicStarted = true;
   }
 
-  if (lock || card === first || card.classList.contains('flipped')) return;
+  if (lock || card.classList.contains('flipped')) return;
 
   card.classList.add('flipped');
 
@@ -189,8 +189,8 @@ cardsData.forEach(data => {
     first = null;
     lock = false;
   }, 800);
+});
 
-  });
 
   game.appendChild(card);
 });
