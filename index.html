@@ -136,6 +136,15 @@ let musicStarted = false;
 let first = null;
 let lock = false;
 
+    function showSongTitle(title) {
+  const stats = document.getElementById('stats');
+  stats.innerHTML = `Versuche: <span id="moves">${moves}</span><br><strong>${title}</strong>`;
+
+  setTimeout(() => {
+    stats.innerHTML = `Versuche: <span id="moves">${moves}</span>`;
+  }, 2000);
+}
+
 let moves = 0;
 const movesDisplay = document.getElementById('moves');
 
