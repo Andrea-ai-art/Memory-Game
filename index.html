@@ -99,18 +99,34 @@
   <audio id="bg-music" src="Memory.mp3" loop></audio>
 
   <script>
-    const images = [
-      'card01.png', 'card01.png',
-      'card02.png', 'card02.png',
-      'card03.png', 'card03.png',
-      'card04.png', 'card04.png',
-      'card05.png', 'card05.png',
-      'card06.png', 'card06.png',
-      'card07.png', 'card07.png',
-      'card08.png', 'card08.png'
-    ];
+  const cardsData = [
+  { img: 'card01.png', title: 'Enjoy the Silence' },
+  { img: 'card01.png', title: 'Enjoy the Silence' },
 
-    images.sort(() => 0.5 - Math.random());
+  { img: 'card02.png', title: 'Personal Jesus' },
+  { img: 'card02.png', title: 'Personal Jesus' },
+
+  { img: 'card03.png', title: 'Strangelove' },
+  { img: 'card03.png', title: 'Strangelove' },
+
+  { img: 'card04.png', title: 'Never Let Me Down Again' },
+  { img: 'card04.png', title: 'Never Let Me Down Again' },
+
+  { img: 'card05.png', title: 'Policy of Truth' },
+  { img: 'card05.png', title: 'Policy of Truth' },
+
+  { img: 'card06.png', title: 'Walking in My Shoes' },
+  { img: 'card06.png', title: 'Walking in My Shoes' },
+
+  { img: 'card07.png', title: 'World in My Eyes' },
+  { img: 'card07.png', title: 'World in My Eyes' },
+
+  { img: 'card08.png', title: 'Halo' },
+  { img: 'card08.png', title: 'Halo' }
+];
+
+ cardsData.sort(() => 0.5 - Math.random());
+
 
     const game = document.getElementById('game');
 const music = document.getElementById('bg-music');
@@ -123,9 +139,12 @@ let lock = false;
 let moves = 0;
 const movesDisplay = document.getElementById('moves');
 
-images.forEach(src => {
+<img src="${data.img}" />
+
   const card = document.createElement('div');
   card.className = 'card';
+
+    card.dataset.title = data.title;
 
   card.innerHTML = `
     <div class="card-inner">
@@ -158,8 +177,11 @@ images.forEach(src => {
     const img1 = first.querySelector('img').src;
     const img2 = card.querySelector('img').src;
 
-    if (img1 === img2) {
-      first = null;
+   if (img1 === img2) {
+  showSongTitle(card.dataset.title);
+  first = null;
+}
+
     } else {
       lock = true;
       setTimeout(() => {
