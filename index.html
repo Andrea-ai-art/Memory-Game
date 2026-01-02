@@ -79,10 +79,33 @@
   background: #334155;
 }
 
+    #song-popup {
+  position: fixed;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+  padding: 12px 24px;
+  border-radius: 20px;
+  font-size: 18px;
+  letter-spacing: 1px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  z-index: 1000;
+}
+
+#song-popup.show {
+  opacity: 1;
+}
+
   </style>
 </head>
 <body>
-  
+
+  <div id="song-popup"></div>
+
  <div class="container">
 
     <div id="ui">
@@ -178,17 +201,15 @@ cardsData.forEach(data => {
     const img2 = card.querySelector('img').src;
 
     if (img1 === img2) {
-      showSongTitle(card.dataset.title);
-      first = null;
-    } else {
-      lock = true;
-      setTimeout(() => {
-        first.classList.remove('flipped');
-        card.classList.remove('flipped');
-        first = null;
-        lock = false;
-      }, 800);
-    }
+  function showSongTitle(title) {
+  const popup = document.getElementById('song-popup');
+  popup.textContent = title;
+  popup.classList.add('show');
+
+  setTimeout(() => {
+    popup.classList.remove('show');
+  }, 2000);
+}
   });
 
   game.appendChild(card);
