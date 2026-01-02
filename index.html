@@ -125,20 +125,23 @@
 
 
 <script>
-  
+// 1. VARIABLE DEFINIEREN (Das hat gefehlt)
 const music = document.getElementById('bg-music');
 let musicStarted = false;
 
 function startMusicOnce() {
-  if (musicStarted) return;
+  if (musicStarted || !music) return; 
+  
   musicStarted = true;
-
   music.muted = false;
-  music.currentTime = 0;
 
+  // Kleiner Trick: Erst play() aufrufen, dann wird die Blockade aufgehoben
   music.play()
     .then(() => console.log("🎵 Musik läuft"))
-    .catch(err => console.log("❌ Audio blockiert:", err));
+    .catch(err => {
+      console.log("❌ Audio blockiert oder Datei nicht gefunden:", err);
+      musicStarted = false; // Zurücksetzen, damit es beim nächsten Klick nochmal probiert wird
+    });
 }
 
 const cardsData = [
@@ -170,17 +173,14 @@ let first = null;
 let lock = false;
 let moves = 0;
 
-/* SONGTITEL EINBLENDEN */
 function showSongTitle(title) {
   songPopup.textContent = title;
   songPopup.classList.add('show');
-
   setTimeout(() => {
     songPopup.classList.remove('show');
   }, 2000);
 }
 
-/* KARTEN ERSTELLEN */
 cardsData.forEach(data => {
   const card = document.createElement('div');
   card.className = 'card';
@@ -196,20 +196,18 @@ cardsData.forEach(data => {
   `;
 
   card.addEventListener('click', () => {
+    // JETZT funktioniert dieser Aufruf:
+    startMusicOnce(); 
 
-  startMusicOnce(); // MUSS erste Zeile sein
+    if (lock || card.classList.contains('flipped')) return;
 
-  if (lock || card.classList.contains('flipped')) return;
-
-
-      card.classList.add('flipped');
+    card.classList.add('flipped');
 
     if (!first) {
       first = card;
       return;
     }
 
-    // EIN VERSUCH = ZWEI KARTEN
     moves++;
     movesDisplay.textContent = moves;
 
@@ -233,11 +231,9 @@ cardsData.forEach(data => {
   game.appendChild(card);
 });
 
-/* NEUSTART */
 document.getElementById('restart').addEventListener('click', () => {
   location.reload();
 });
 </script>
-
 </body>
 </html>
