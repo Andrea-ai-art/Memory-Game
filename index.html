@@ -126,11 +126,19 @@
 
 <script>
 
-console.log("Script läuft");
-
-const music = document.getElementById('bg-music');
-music.volume = 1.00;
 let musicStarted = false;
+
+function startMusicOnce() {
+  if (musicStarted) return;
+  musicStarted = true;
+
+  music.muted = false;
+  music.currentTime = 0;
+
+  music.play()
+    .then(() => console.log("🎵 Musik läuft"))
+    .catch(err => console.log("❌ Audio blockiert:", err));
+}
 
 const cardsData = [
   { img: 'card01.png', title: 'World in my Eyes' },
@@ -187,14 +195,13 @@ cardsData.forEach(data => {
   `;
 
   card.addEventListener('click', () => {
-  if (!musicStarted) {
-  music.play().catch(() => {});
-  musicStarted = true;
-  }
 
-    if (lock || card.classList.contains('flipped')) return;
+  startMusicOnce(); // MUSS erste Zeile sein
 
-    card.classList.add('flipped');
+  if (lock || card.classList.contains('flipped')) return;
+
+
+      card.classList.add('flipped');
 
     if (!first) {
       first = card;
