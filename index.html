@@ -124,18 +124,18 @@
   <audio id="bg-music" src="Memory.mp3" loop></audio>
 
 <script>
-  
+
 console.log("Script läuft");
 
-  const music = document.getElementById('bg-music');
+const music = document.getElementById('bg-music');
 music.volume = 0.35;
 let musicStarted = false;
 
 const cardsData = [
   { img: 'card01.png', title: 'World in my Eyes' },
   { img: 'card01.png', title: 'World in my Eyes' },
-  { img: 'card02.png', title: 'Walking in my Shoes' },
-  { img: 'card02.png', title: 'Walking in my Shoes' },
+  { img: 'card02.png', title: 'Walking in My Shoes' },
+  { img: 'card02.png', title: 'Walking in My Shoes' },
   { img: 'card03.png', title: 'Precious' },
   { img: 'card03.png', title: 'Precious' },
   { img: 'card04.png', title: 'A Question of Time' },
@@ -146,27 +146,31 @@ const cardsData = [
   { img: 'card06.png', title: 'Enjoy the Silence' },
   { img: 'card07.png', title: 'Behind the Wheel' },
   { img: 'card07.png', title: 'Behind the Wheel' },
-  { img: 'card08.png', title: 'People are People' },
-  { img: 'card08.png', title: 'People are People' }
+  { img: 'card08.png', title: 'People Are People' },
+  { img: 'card08.png', title: 'People Are People' }
 ];
 
 cardsData.sort(() => 0.5 - Math.random());
 
 const game = document.getElementById('game');
 const movesDisplay = document.getElementById('moves');
-const songBox = document.getElementById('songtitle');
+const songPopup = document.getElementById('song-popup');
 
 let first = null;
 let lock = false;
 let moves = 0;
 
+/* SONGTITEL EINBLENDEN */
 function showSongTitle(title) {
-  songBox.textContent = title;
+  songPopup.textContent = title;
+  songPopup.classList.add('show');
+
   setTimeout(() => {
-    songBox.textContent = '';
+    songPopup.classList.remove('show');
   }, 2000);
 }
 
+/* KARTEN ERSTELLEN */
 cardsData.forEach(data => {
   const card = document.createElement('div');
   card.className = 'card';
@@ -183,9 +187,9 @@ cardsData.forEach(data => {
 
   card.addEventListener('click', () => {
     if (!musicStarted) {
-  music.play().catch(() => {});
-  musicStarted = true;
-}
+      music.play().catch(() => {});
+      musicStarted = true;
+    }
 
     if (lock || card.classList.contains('flipped')) return;
 
@@ -196,6 +200,7 @@ cardsData.forEach(data => {
       return;
     }
 
+    // EIN VERSUCH = ZWEI KARTEN
     moves++;
     movesDisplay.textContent = moves;
 
@@ -203,25 +208,27 @@ cardsData.forEach(data => {
     const img2 = card.querySelector('img').src;
 
     if (img1 === img2) {
-  function showSongTitle(title) {
-  const popup = document.getElementById('song-popup');
-  popup.textContent = title;
-  popup.classList.add('show');
-
-  setTimeout(() => {
-    popup.classList.remove('show');
-  }, 2000);
-}
+      showSongTitle(card.dataset.title);
+      first = null;
+    } else {
+      lock = true;
+      setTimeout(() => {
+        first.classList.remove('flipped');
+        card.classList.remove('flipped');
+        first = null;
+        lock = false;
+      }, 800);
+    }
   });
 
   game.appendChild(card);
 });
 
+/* NEUSTART */
 document.getElementById('restart').addEventListener('click', () => {
   location.reload();
 });
 </script>
-
 
 </body>
 </html>
