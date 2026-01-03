@@ -9,35 +9,29 @@
       background: #0f172a;
       color: #e5e7eb;
       display: flex;
-      justify-content: center;
+      flex-direction: column; /* Wichtig für die Anordnung */
       align-items: center;
       min-height: 100vh;
+      margin: 0;
+      padding: 20px;
     }
     .game {
       display: grid;
       grid-template-columns: repeat(4, 120px);
       gap: 12px;
     }
-.card {
-  width: 120px;
-  height: 120px;
-  perspective: 800px;
-  cursor: pointer;
-
-  opacity: 0;
-    transform: scale(0.85) translateY(10px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
+    .card {
+      width: 120px;
+      height: 120px;
+      perspective: 800px;
+      cursor: pointer;
+      opacity: 0;
+      transform: scale(0.85) translateY(10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
     }
-
-.card.show {
-  opacity: 1;
-  transform: scale(1) translateY(0);
-}
-
-@keyframes settle {
-  0% { transform: scale(0.9) rotate(-1deg); }
-  100% { transform: scale(1) rotate(0); }
-
+    .card.show {
+      opacity: 1;
+      transform: scale(1) translateY(0);
     }
     .card-inner {
       width: 100%;
@@ -58,131 +52,68 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 14px;
+      font-size: 24px;
     }
-    .front {
-      background: #334155;
-    }
+    .front { background: #334155; }
     .back {
       background: #f8fafc;
       transform: rotateY(180deg);
     }
     img {
-      max-width: 100%;
-      max-height: 100%;
-      border-radius: 12px;
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 8px;
     }
-
-    #stats {
-  margin-bottom: 16px;
-  font-size: 18px;
-  letter-spacing: 1px;
-}
-
+    #stats { margin-bottom: 16px; font-size: 18px; }
     #restart {
-  margin-bottom: 20px;
-  padding: 10px 18px;
-  font-size: 14px;
-  background: #1e293b;
-  color: #e5e7eb;
-  border: 1px solid #475569;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-#restart:hover {
-  background: #334155;
-}
-
+      margin-bottom: 20px;
+      padding: 10px 18px;
+      background: #1e293b;
+      color: #e5e7eb;
+      border: 1px solid #475569;
+      border-radius: 8px;
+      cursor: pointer;
+    }
     #song-popup {
-  position: fixed;
-  top: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(15, 23, 42, 0.9);
-  color: #e5e7eb;
-  padding: 12px 24px;
-  border-radius: 20px;
-  font-size: 18px;
-  letter-spacing: 1px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s ease;
-  z-index: 1000;
-}
-
-#song-popup.show {
-  opacity: 1;
-}
-
+      position: fixed;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.9);
+      padding: 12px 24px;
+      border-radius: 20px;
+      opacity: 0;
+      transition: opacity 0.4s;
+      z-index: 1000;
+    }
+    #song-popup.show { opacity: 1; }
     #win-message {
-  opacity: 0;
-  pointer-events: none;
-  text-align: center;
-  font-size: 26px;
-  margin-top: 20px;
-  transition: opacity 0.6s ease;
-}
-
-#win-message.visible {
-  opacity: 1;
-}
-
+      display: none;
+      text-align: center;
+      font-size: 26px;
+      margin-top: 20px;
+      color: #10b981;
+    }
+    #win-message.visible { display: block; }
   </style>
 </head>
 <body>
 
   <div id="song-popup"></div>
 
- <div class="container">
-
-    <div id="ui">
-      
-<div id="stats">
-  Versuche: <span id="moves">0</span>
-</div>
-
-<div id="win-message">
-  <p>Everything counts.</p>
-</div>
-
-
-<button id="restart">Neustart</button>
-
-<div class="game" id="game"></div>
-
-
+  <div id="stats">Versuche: <span id="moves">0</span></div>
   <button id="restart">Neustart</button>
-
+  
   <div class="game" id="game"></div>
 
-  <!-- AUDIO MUSS VOR DEM SCRIPT KOMMEN -->
- <audio id="bg-music" src="Memory.mp3" loop></audio>
+  <div id="win-message">
+    <p>Everything counts. Du hast gewonnen!</p>
+  </div>
 
+  <audio id="bg-music" src="Memory.mp3" loop></audio>
 
 <script>
-  let matchedPairs = 0;
-const totalPairs = cardsData.length / 2;
-
-// 1. VARIABLE DEFINIEREN (Das hat gefehlt)
-const music = document.getElementById('bg-music');
-let musicStarted = false;
-
-function startMusicOnce() {
-  if (musicStarted || !music) return; 
-  
-  musicStarted = true;
-  music.muted = false;
-
-  // Kleiner Trick: Erst play() aufrufen, dann wird die Blockade aufgehoben
-  music.play()
-    .then(() => console.log("🎵 Musik läuft"))
-    .catch(err => {
-      console.log("❌ Audio blockiert oder Datei nicht gefunden:", err);
-      musicStarted = false; // Zurücksetzen, damit es beim nächsten Klick nochmal probiert wird
-    });
-}
-
+// 1. ZUERST die Daten definieren
 const cardsData = [
   { img: 'card01.png', title: 'World in my Eyes' },
   { img: 'card01.png', title: 'World in my Eyes' },
@@ -202,52 +133,47 @@ const cardsData = [
   { img: 'card08.png', title: 'People Are People' }
 ];
 
+// 2. Variablen initialisieren
 cardsData.sort(() => 0.5 - Math.random());
 
 const game = document.getElementById('game');
 const movesDisplay = document.getElementById('moves');
 const songPopup = document.getElementById('song-popup');
+const music = document.getElementById('bg-music');
 
 let first = null;
 let lock = false;
 let moves = 0;
-
-let matches = 0;
+let matchedPairs = 0;
 const totalPairs = cardsData.length / 2;
-const finalMessage = document.getElementById('final-message');
+let musicStarted = false;
 
+function startMusicOnce() {
+  if (musicStarted || !music) return;  
+  musicStarted = true;
+  music.play().catch(err => console.log("Audio-Start verzögert"));
+}
 
 function showSongTitle(title) {
   songPopup.textContent = title;
   songPopup.classList.add('show');
-  setTimeout(() => {
-    songPopup.classList.remove('show');
-  }, 2000);
+  setTimeout(() => songPopup.classList.remove('show'), 2000);
 }
 
-  function showWinMessage() {
-  document.getElementById('win-message').classList.add('visible');
-}
-
-  
+// 3. Karten erstellen
 cardsData.forEach((data, index) => {
   const card = document.createElement('div');
   card.className = 'card';
   card.dataset.title = data.title;
-
   card.innerHTML = `
     <div class="card-inner">
       <div class="card-face front">🎵</div>
-      <div class="card-face back">
-        <img src="${data.img}">
-      </div>
+      <div class="card-face back"><img src="${data.img}"></div>
     </div>
   `;
 
   card.addEventListener('click', () => {
-    // JETZT funktioniert dieser Aufruf:
     startMusicOnce(); 
-
     if (lock || card.classList.contains('flipped')) return;
 
     card.classList.add('flipped');
@@ -263,40 +189,29 @@ cardsData.forEach((data, index) => {
     const img1 = first.querySelector('img').src;
     const img2 = card.querySelector('img').src;
 
-  if (img1 === img2) {
-  showSongTitle(card.dataset.title);
-
-  matchedPairs++;
-
-  if (matchedPairs === totalPairs) {
-    showWinMessage();
-  }
-
-    matchedPairs = 0;
-document.getElementById('win-message').classList.remove('visible');
-
-    
-  first = null;
-} else {
-  lock = true;
-  setTimeout(() => {
-    first.classList.remove('flipped');
-    card.classList.remove('flipped');
-    first = null;
-    lock = false;
-  }, 800);
-}
-});
+    if (img1 === img2) {
+      showSongTitle(card.dataset.title);
+      matchedPairs++;
+      first = null;
+      if (matchedPairs === totalPairs) {
+        document.getElementById('win-message').classList.add('visible');
+      }
+    } else {
+      lock = true;
+      setTimeout(() => {
+        first.classList.remove('flipped');
+        card.classList.remove('flipped');
+        first = null;
+        lock = false;
+      }, 800);
+    }
+  });
 
   game.appendChild(card);
-  setTimeout(() => {
-    card.classList.add('show');
-  }, index * 80);
+  setTimeout(() => card.classList.add('show'), index * 50);
 });
 
-document.getElementById('restart').addEventListener('click', () => {
-  location.reload();
-});
+document.getElementById('restart').addEventListener('click', () => location.reload());
 </script>
 </body>
 </html>
