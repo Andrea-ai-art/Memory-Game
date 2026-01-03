@@ -23,6 +23,20 @@
       height: 120px;
       perspective: 800px;
       cursor: pointer;
+        opacity: 0;
+  transform: scale(0.8) translateY(10px);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
+
+.card.show {
+  animation: settle 0.4s ease;
+}
+@keyframes settle {
+  0% { transform: scale(0.9) rotate(-1deg); }
+  100% { transform: scale(1) rotate(0); }
+
     }
     .card-inner {
       width: 100%;
@@ -181,7 +195,7 @@ function showSongTitle(title) {
   }, 2000);
 }
 
-cardsData.forEach(data => {
+cardsData.forEach((data, index) => {
   const card = document.createElement('div');
   card.className = 'card';
   card.dataset.title = data.title;
@@ -229,6 +243,9 @@ cardsData.forEach(data => {
   });
 
   game.appendChild(card);
+  setTimeout(() => {
+    card.classList.add('show');
+  }, index * 80);
 });
 
 document.getElementById('restart').addEventListener('click', () => {
