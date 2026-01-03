@@ -120,7 +120,28 @@
     box-shadow: 0 0 10px rgba(56, 189, 248, 0.2), 0 15px 35px rgba(0, 0, 0, 0.6);
   }
 }
-    #win-message.visible { display: block; }
+    /* 1. Das ist der Standard-Zustand: Die Nachricht ist versteckt */
+#win-message {
+  display: none; 
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: 30px;
+  color: #10b981;
+  text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+/* 2. Diese Klasse wird vom JavaScript erst am Ende hinzugefügt */
+#win-message.visible {
+  display: block;
+  animation: celebrate 1s ease-out;
+}
+
+/* Der kleine Extra-Effekt beim Erscheinen */
+@keyframes celebrate {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
   </style>
 </head>
 <body>
@@ -218,13 +239,23 @@ cardsData.forEach((data, index) => {
     const img2 = card.querySelector('img').src;
 
     if (img1 === img2) {
+      // 1. Ein Paar wurde gefunden!
       showSongTitle(card.dataset.title);
-      matchedPairs++;
-      first = null;
+      matchedPairs++; 
+
+      // 2. Prüfen, ob das Spiel zu Ende ist
       if (matchedPairs === totalPairs) {
-        document.getElementById('win-message').classList.add('visible');
+        // Wir warten eine halbe Sekunde, damit man das letzte Paar noch sieht
+        setTimeout(() => {
+          document.getElementById('win-message').classList.add('visible');
+        }, 500);
       }
+      
+      // 3. WICHTIG: Die Auswahl für den nächsten Zug leeren
+      first = null; 
+
     } else {
+      // Kein Paar gefunden: Karten nach kurzer Zeit wieder umdrehen
       lock = true;
       setTimeout(() => {
         first.classList.remove('flipped');
