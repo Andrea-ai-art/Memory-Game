@@ -115,6 +115,19 @@
   opacity: 1;
 }
 
+    #win-message {
+  opacity: 0;
+  pointer-events: none;
+  text-align: center;
+  font-size: 26px;
+  margin-top: 20px;
+  transition: opacity 0.6s ease;
+}
+
+#win-message.visible {
+  opacity: 1;
+}
+
   </style>
 </head>
 <body>
@@ -127,8 +140,16 @@
       
 <div id="stats">
   Versuche: <span id="moves">0</span>
-  <div id="songtitle" style="margin-top:8px; font-weight:bold;"></div>
 </div>
+
+<div id="win-message">
+  <p>Everything counts.</p>
+</div>
+
+
+<button id="restart">Neustart</button>
+
+<div class="game" id="game"></div>
 
 
   <button id="restart">Neustart</button>
@@ -140,6 +161,9 @@
 
 
 <script>
+  let matchedPairs = 0;
+const totalPairs = cardsData.length / 2;
+
 // 1. VARIABLE DEFINIEREN (Das hat gefehlt)
 const music = document.getElementById('bg-music');
 let musicStarted = false;
@@ -188,6 +212,11 @@ let first = null;
 let lock = false;
 let moves = 0;
 
+let matches = 0;
+const totalPairs = cardsData.length / 2;
+const finalMessage = document.getElementById('final-message');
+
+
 function showSongTitle(title) {
   songPopup.textContent = title;
   songPopup.classList.add('show');
@@ -196,6 +225,11 @@ function showSongTitle(title) {
   }, 2000);
 }
 
+  function showWinMessage() {
+  document.getElementById('win-message').classList.add('visible');
+}
+
+  
 cardsData.forEach((data, index) => {
   const card = document.createElement('div');
   card.className = 'card';
@@ -229,19 +263,30 @@ cardsData.forEach((data, index) => {
     const img1 = first.querySelector('img').src;
     const img2 = card.querySelector('img').src;
 
-    if (img1 === img2) {
-      showSongTitle(card.dataset.title);
-      first = null;
-    } else {
-      lock = true;
-      setTimeout(() => {
-        first.classList.remove('flipped');
-        card.classList.remove('flipped');
-        first = null;
-        lock = false;
-      }, 800);
-    }
-  });
+  if (img1 === img2) {
+  showSongTitle(card.dataset.title);
+
+  matchedPairs++;
+
+  if (matchedPairs === totalPairs) {
+    showWinMessage();
+  }
+
+    matchedPairs = 0;
+document.getElementById('win-message').classList.remove('visible');
+
+    
+  first = null;
+} else {
+  lock = true;
+  setTimeout(() => {
+    first.classList.remove('flipped');
+    card.classList.remove('flipped');
+    first = null;
+    lock = false;
+  }, 800);
+}
+});
 
   game.appendChild(card);
   setTimeout(() => {
